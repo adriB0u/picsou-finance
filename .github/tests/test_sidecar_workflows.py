@@ -72,7 +72,8 @@ class SidecarWorkflowInventoryTest(unittest.TestCase):
 
     def test_publish_workflow_keeps_both_platforms_and_branch_tagging(self):
         job_text = DOCKER_WORKFLOW.read_text(encoding="utf-8")
-        self.assertIn("platforms: linux/amd64,linux/arm64", job_text)
+        self.assertIn("platforms: ${{ vars.IMAGE_PLATFORMS || 'linux/amd64,linux/arm64' }}", job_text)
+        self.assertNotIn("platforms: linux/amd64\n", job_text)
         self.assertIn(
             "type=ref,event=branch,enable=${{ github.ref != 'refs/heads/main' }}",
             job_text,

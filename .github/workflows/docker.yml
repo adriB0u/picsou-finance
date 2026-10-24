@@ -67,7 +67,9 @@ jobs:
         with:
           context: services/base
           target: python
-          platforms: linux/amd64,linux/arm64
+          # Both by default; a fork can set the IMAGE_PLATFORMS repository variable
+          # to build amd64 only and skip the slow emulated arm64 build.
+          platforms: ${{ vars.IMAGE_PLATFORMS || 'linux/amd64,linux/arm64' }}
           push: true
           tags: ${{ steps.meta-python.outputs.tags }}
           # Links the package to this repository so it inherits the repository's
@@ -97,7 +99,9 @@ jobs:
         with:
           context: services/base
           target: chromium
-          platforms: linux/amd64,linux/arm64
+          # Both by default; a fork can set the IMAGE_PLATFORMS repository variable
+          # to build amd64 only and skip the slow emulated arm64 build.
+          platforms: ${{ vars.IMAGE_PLATFORMS || 'linux/amd64,linux/arm64' }}
           push: true
           tags: ${{ steps.meta-chromium.outputs.tags }}
           # Links the package to this repository so it inherits the repository's
@@ -256,7 +260,9 @@ jobs:
         with:
           context: ${{ matrix.context }}
           file: ${{ matrix.dockerfile }}
-          platforms: linux/amd64,linux/arm64
+          # Both by default; a fork can set the IMAGE_PLATFORMS repository variable
+          # to build amd64 only and skip the slow emulated arm64 build.
+          platforms: ${{ vars.IMAGE_PLATFORMS || 'linux/amd64,linux/arm64' }}
           push: true
           tags: ${{ steps.meta.outputs.tags }}
           labels: ${{ steps.meta.outputs.labels }}
